@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import solc from 'solc';
+const input={language:'Solidity',sources:{'CertiAgentRegistry.sol':{content:fs.readFileSync('contracts/CertiAgentRegistry.sol','utf8')}},settings:{optimizer:{enabled:true,runs:200},evmVersion:'paris',outputSelection:{'*':{'*':['abi','evm.bytecode.object']}}}};
+const output=JSON.parse(solc.compile(JSON.stringify(input)));
+const errors=(output.errors||[]).filter(x=>x.severity==='error');
+if(errors.length)throw Error(errors.map(x=>x.formattedMessage).join('\n'));
+const contract=output.contracts['CertiAgentRegistry.sol'].CertiAgentRegistry;
+if(!contract.evm.bytecode.object)throw Error('Missing contract bytecode');
+fs.mkdirSync('build',{recursive:true});
+fs.writeFileSync(path.resolve('build/CertiAgentRegistry.json'),JSON.stringify({contractName:'CertiAgentRegistry',abi:contract.abi,bytecode:`0x${contract.evm.bytecode.object}`,compilerVersion:solc.version()},null,2));
+console.log('Compiled contract: build/CertiAgentRegistry.json');

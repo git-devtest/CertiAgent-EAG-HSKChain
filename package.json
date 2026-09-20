@@ -1,0 +1,22 @@
+{
+  "name": "certiagent-hsk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Autonomous document-hash attestation agent for HSK Chain and Ethereum Sepolia",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test",
+    "check": "node --check src/index.js && node --check src/agent.js && node --check src/chain.js && node --check src/ai.js && node --check public/app.js && node --check scripts/init-wallet.js && node --check scripts/compile.js",
+    "wallet:new": "node scripts/init-wallet.js",
+    "compile": "node scripts/compile.js"
+  },
+  "dependencies": {
+    "ethers": "^6.16.0",
+    "solc": "^0.8.30"
+  },
+  "license": "MIT"
+}
